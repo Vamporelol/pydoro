@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-
-__version__ = "0.2.1"
-
-import sys
 import threading
 
 from prompt_toolkit.application import Application
@@ -15,8 +11,7 @@ from prompt_toolkit.widgets import Box, Button, Label
 
 from pydoro.pydoro_core.config import Configuration
 from pydoro.pydoro_core.tomato import Tomato
-from pydoro.pydoro_core.util import every, in_app_path
-import pydoro.pydoro_core.sound as sound
+from pydoro.pydoro_core.util import every
 
 
 class UserInterface:
@@ -39,12 +34,10 @@ class UserInterface:
             content=self.text_area,
             dont_extend_height=True,
             height=11,
-            style="bg:#ffffff #000000",
         )
         root_container = Box(
             HSplit(
                 [
-                    Label(text="Press `Tab` to move the focus."),
                     HSplit(
                         [
                             VSplit(
@@ -56,7 +49,6 @@ class UserInterface:
                                     btn_exit,
                                 ],
                                 padding=1,
-                                style="bg:#cccccc",
                             ),
                             text_window,
                         ]
@@ -70,13 +62,7 @@ class UserInterface:
         # Styling.
         style = Style(
             [
-                ("left-pane", "bg:#888800 #000000"),
-                ("right-pane", "bg:#00aa00 #000000"),
-                ("button", "#000000"),
-                ("button-arrow", "#000000"),
-                ("button focused", "bg:#ff0000"),
-                ("red", "#ff0000"),
-                ("green", "#00ff00"),
+                ('button.focused','bg:black')
             ]
         )
         self.application = Application(
@@ -123,16 +109,7 @@ class UserInterface:
 
 
 def main():
-    config = Configuration()
-    if config.audio_check:
-        # WHY twice: to catch more issues
-        sound.play(in_app_path("b15.wav"), block=True)
-        sound.play(in_app_path("b15.wav"), block=True)
-        sys.exit(0)
-    if config.show_version:
-        print("pydoro : version - {0}".format(__version__))
-        sys.exit(0)
-    UserInterface(config).run()
+    UserInterface(Configuration()).run()
 
 
 if __name__ == "__main__":
